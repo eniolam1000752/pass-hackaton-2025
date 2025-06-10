@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useVoice } from '@humeai/voice-react';
 
 const features = [
   {
@@ -55,6 +56,8 @@ const features = [
 ];
 
 export function GettingStartedPage() {
+  const { status, connect } = useVoice();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -164,6 +167,12 @@ export function GettingStartedPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.4 }}
+          onClick={() => {
+            connect()
+              .then(() => {})
+              .catch(() => {})
+              .finally(() => {});
+          }}
         >
           <motion.button
             className="w-full py-3 px-6 rounded-lg bg-gradient-to-r from-[#7B61FF] to-[#5AD6FF] text-white font-semibold text-lg shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-[#7B61FF]/40"

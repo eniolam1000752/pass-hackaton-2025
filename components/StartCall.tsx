@@ -2,10 +2,30 @@ import { useVoice } from '@humeai/voice-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from './ui/button';
 import { Phone } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function StartCall() {
   const { status, connect } = useVoice();
+  const isConnectedRef = useRef(false);
+
+  useEffect(() => {
+    console.log('status', status);
+
+    if (
+      status.value !== 'connected' &&
+      status.value !== 'connecting' &&
+      !isConnectedRef.current
+    ) {
+      setTimeout(() => {
+        connect()
+          .then(() => {
+            isConnectedRef.current = true;
+          })
+          .catch(() => {})
+          .finally(() => {});
+      }, 1000);
+    }
+  }, [status]);
 
   return (
     <AnimatePresence>
