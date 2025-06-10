@@ -5,27 +5,9 @@ import { Phone } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 export default function StartCall() {
-  const { status, connect } = useVoice();
-  const isConnectedRef = useRef(false);
+  const { status, connect, sendUserInput } = useVoice();
 
-  useEffect(() => {
-    console.log('status', status);
-
-    if (
-      status.value !== 'connected' &&
-      status.value !== 'connecting' &&
-      !isConnectedRef.current
-    ) {
-      setTimeout(() => {
-        connect()
-          .then(() => {
-            isConnectedRef.current = true;
-          })
-          .catch(() => {})
-          .finally(() => {});
-      }, 1000);
-    }
-  }, [status]);
+  console.log('status', status);
 
   return (
     <AnimatePresence>
@@ -56,6 +38,7 @@ export default function StartCall() {
                 onClick={() => {
                   connect()
                     .then(() => {
+                      // sendUserInput('Onboard me');
                       // sendUserInput('Onboard me');
                     })
                     .catch(() => {})

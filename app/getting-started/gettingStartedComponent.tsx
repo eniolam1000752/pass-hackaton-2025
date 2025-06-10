@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useVoice } from '@humeai/voice-react';
+import { useVoice, useVoiceClient } from '@humeai/voice-react';
+import { useRouter } from 'next/navigation';
 
 const features = [
   {
@@ -56,7 +57,10 @@ const features = [
 ];
 
 export function GettingStartedPage() {
-  const { status, connect } = useVoice();
+  const { connect, sendSessionSettings, readyState } = useVoice();
+  const router = useRouter();
+
+  console.log('readyState', readyState);
 
   return (
     <motion.div
@@ -161,30 +165,30 @@ export function GettingStartedPage() {
         </motion.div>
 
         {/* Get Started Button */}
-        <motion.a
-          href="/onboarding"
-          className="mt-12 w-full"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.4 }}
+
+        <motion.button
           onClick={() => {
             connect()
-              .then(() => {})
+              .then(() => {
+                console.log('connected');
+
+                router.push('/onboarding');
+                setTimeout(() => {
+                  // sendAssistantInput('Hey hello');
+                }, 5000);
+              })
               .catch(() => {})
               .finally(() => {});
           }}
+          className="w-full py-3 px-6 rounded-lg bg-gradient-to-r from-[#7B61FF] to-[#5AD6FF] text-white font-semibold text-lg shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-[#7B61FF]/40"
+          whileHover={{
+            scale: 1.045,
+            boxShadow: '0 8px 32px 0 rgba(90,214,255,0.18)',
+          }}
+          whileTap={{ scale: 0.97 }}
         >
-          <motion.button
-            className="w-full py-3 px-6 rounded-lg bg-gradient-to-r from-[#7B61FF] to-[#5AD6FF] text-white font-semibold text-lg shadow-md hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-[#7B61FF]/40"
-            whileHover={{
-              scale: 1.045,
-              boxShadow: '0 8px 32px 0 rgba(90,214,255,0.18)',
-            }}
-            whileTap={{ scale: 0.97 }}
-          >
-            Get Started
-          </motion.button>
-        </motion.a>
+          Get Started
+        </motion.button>
       </motion.div>
     </motion.div>
   );
